@@ -19,6 +19,11 @@ body {
     overflow-x: hidden !important;
 }
 
+.table {
+    margin: auto;
+    width: 50% !important;
+}
+
 .container {
     max-width: 100% !important;
     overflow-x: hidden !important;
