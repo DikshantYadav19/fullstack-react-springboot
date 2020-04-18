@@ -1,4 +1,4 @@
-package com.todo.restservices.basic.auth;
+package com.todo.basic.auth;
 
 public class AuthenticationBean {
     private String message;
