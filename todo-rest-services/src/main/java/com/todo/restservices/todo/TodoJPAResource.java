@@ -11,43 +11,48 @@ import java.util.List;
 
 @RestController
 @CrossOrigin(origins = "http://localhost:4200")
-public class TodoResource {
+public class TodoJPAResource {
 
     @Autowired
     private TodoHardcodedService todoService;
 
-    @GetMapping(path = "/users/{username}/todos")
+    @Autowired
+    private TodoJPARepository todoJPARepository;
+
+    @GetMapping(path = "/jpa/users/{username}/todos")
     public List<Todo> getAllTodos(@PathVariable String username) {
-        return todoService.findAll();
+        return todoJPARepository.findByUsername(username);
     }
 
-    @GetMapping(path = "/users/{username}/todos/{id}")
+    @GetMapping(path = "/jpa/users/{username}/todos/{id}")
     public Todo getTodo(@PathVariable String username, @PathVariable long id) {
-        return todoService.findById(id);
+        return todoJPARepository.findById(id).get();
     }
 
-    @PutMapping(path = "/users/{username}/todos/{id}")
+    @PutMapping(path = "/jpa/users/{username}/todos/{id}")
     public ResponseEntity<Todo> updateTodo(@PathVariable String username, @PathVariable long id, @RequestBody Todo todo) {
-        Todo updatedTodo = todoService.save(todo);
+
+        todo.setUsername(username);
+        Todo updatedTodo = todoJPARepository.save(todo);
 
         return new ResponseEntity<Todo>(updatedTodo, HttpStatus.OK);
     }
 
-    @PostMapping(path = "/users/{username}/todos")
+    @PostMapping(path = "/jpa/users/{username}/todos")
     public ResponseEntity<Void> addTodo(@PathVariable String username, @RequestBody Todo todo) {
-        Todo createdTodo = todoService.save(todo);
+
+        todo.setUsername(username);
+        Todo createdTodo = todoJPARepository.save(todo);
 
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(createdTodo.getId()).toUri();
         return ResponseEntity.created(uri).build();
     }
 
-    @DeleteMapping(path = "/users/{username}/todos/{id}")
+    @DeleteMapping(path = "/jpa/users/{username}/todos/{id}")
     public ResponseEntity<Void> deleteTodo(@PathVariable String username, @PathVariable long id) {
-        Todo todo = todoService.deleteById(id);
 
-        if (todo != null) {
-            return ResponseEntity.noContent().build();
-        }
-        return ResponseEntity.notFound().build();
+        todoJPARepository.deleteById(id);
+
+        return ResponseEntity.noContent().build();
     }
 }
