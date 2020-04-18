@@ -1,10 +1,18 @@
 package com.todo.restservices.todo;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
 import java.util.Date;
 import java.util.Objects;
 
+@Entity
 public class Todo {
-    private long id;
+
+    @Id
+    @GeneratedValue
+    private Long id;
+
     private String username;
     private String description;
     private Date targetDate;
@@ -14,7 +22,7 @@ public class Todo {
 
     }
 
-    public Todo(long id, String username, String description, Date targetDate, boolean isDone) {
+    public Todo(Long id, String username, String description, Date targetDate, boolean isDone) {
         super();
         this.id = id;
         this.username = username;
@@ -23,11 +31,11 @@ public class Todo {
         this.isDone = isDone;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
